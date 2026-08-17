@@ -1,0 +1,8 @@
+transformers>=4.46.0
+datasets>=3.0.0
+trl>=0.14.0
+peft>=0.13.0
+accelerate>=1.0.0
+torch>=2.2.0
+sentencepiece>=0.2.0
+tqdm>=4.66.0

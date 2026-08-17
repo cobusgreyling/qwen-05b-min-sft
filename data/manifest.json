@@ -1,0 +1,34 @@
+{
+  "model_target": "Qwen/Qwen2.5-0.5B-Instruct",
+  "thesis": "least-data SFT: teach a new ticket-card schema",
+  "counts": {
+    "train": 8,
+    "holdout": 4,
+    "test": 6
+  },
+  "train_ids": [
+    "T-1042",
+    "T-2108",
+    "T-3302",
+    "T-4410",
+    "T-8001",
+    "T-5519",
+    "T-6622",
+    "T-7730"
+  ],
+  "holdout_ids": [
+    "T-8844",
+    "T-9901",
+    "T-1015",
+    "T-1120"
+  ],
+  "test_ids": [
+    "T-2001",
+    "T-2002",
+    "T-2003",
+    "T-2004",
+    "T-2005",
+    "T-2006"
+  ],
+  "rule": "split by ticket id; test is frozen; format lives in completions only"
+}

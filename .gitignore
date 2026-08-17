@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+.ipynb_checkpoints/
+outputs/lora-sft/
+*.pt
+*.bin
+*.safetensors
+adapter_model*
+checkpoint-*/
