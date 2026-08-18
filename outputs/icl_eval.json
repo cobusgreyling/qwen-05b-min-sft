@@ -1,0 +1,248 @@
+{
+  "source": "icl",
+  "base_model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "adapter": null,
+  "mode": "icl",
+  "n": 6,
+  "summary": {
+    "non_empty": 1.0,
+    "no_role_leak": 1.0,
+    "has_ticket_tags": 1.0,
+    "parsed_ok": 1.0,
+    "id_match": 1.0,
+    "verdict_match": 0.6666666666666666,
+    "amount_match": 0.6666666666666666,
+    "reason_match": 1.0,
+    "format_pass": 0.8333333333333334,
+    "task_pass": 0.3333333333333333,
+    "note_facts_pass": 1.0
+  },
+  "per_prompt": [
+    {
+      "trace_id": "T-2001",
+      "family": "duplicate",
+      "gold": {
+        "id": "T-2001",
+        "verdict": "REFUND",
+        "amount_cents": 4500,
+        "reason_code": "DUPLICATE"
+      },
+      "facts": {
+        "amounts_cents": [
+          4500,
+          2001
+        ]
+      },
+      "mode": "icl",
+      "generation": "<<TICKET>>\nid: T-2001\nverdict: ESCALATE\namount_cents: 4500\nreason_code: DUPLICATE\nnote: Invoice duplicate; escalate to fraud review.\n<</TICKET>>",
+      "non_empty": true,
+      "no_role_leak": true,
+      "has_ticket_tags": true,
+      "parsed_ok": true,
+      "id_match": true,
+      "verdict_match": false,
+      "amount_match": true,
+      "reason_match": true,
+      "verdict_allowed": true,
+      "reason_allowed": true,
+      "note_facts_pass": true,
+      "predicted": {
+        "id": "T-2001",
+        "verdict": "ESCALATE",
+        "amount_cents": 4500,
+        "reason_code": "DUPLICATE",
+        "note": "Invoice duplicate; escalate to fraud review."
+      },
+      "format_pass": true,
+      "task_pass": false,
+      "preview": "<<TICKET>> | id: T-2001 | verdict: ESCALATE | amount_cents: 4500 | reason_code: DUPLICATE | note: Invoice duplicate; escalate to fraud review. | <</TICKET>>"
+    },
+    {
+      "trace_id": "T-2002",
+      "family": "fraud",
+      "gold": {
+        "id": "T-2002",
+        "verdict": "ESCALATE",
+        "amount_cents": 0,
+        "reason_code": "FRAUD"
+      },
+      "facts": {
+        "amounts_cents": []
+      },
+      "mode": "icl",
+      "generation": "<<TICKET>>\nid: T-2002\nverdict: ESCALATE\namount_cents: 0\nreason_code: FRAUD\nnote: Fraudulent transaction; escalate to fraud review.\n<</TICKET>>",
+      "non_empty": true,
+      "no_role_leak": true,
+      "has_ticket_tags": true,
+      "parsed_ok": true,
+      "id_match": true,
+      "verdict_match": true,
+      "amount_match": true,
+      "reason_match": true,
+      "verdict_allowed": true,
+      "reason_allowed": true,
+      "note_facts_pass": true,
+      "predicted": {
+        "id": "T-2002",
+        "verdict": "ESCALATE",
+        "amount_cents": 0,
+        "reason_code": "FRAUD",
+        "note": "Fraudulent transaction; escalate to fraud review."
+      },
+      "format_pass": true,
+      "task_pass": true,
+      "preview": "<<TICKET>> | id: T-2002 | verdict: ESCALATE | amount_cents: 0 | reason_code: FRAUD | note: Fraudulent transaction; escalate to fraud review. | <</TICKET>>"
+    },
+    {
+      "trace_id": "T-2003",
+      "family": "policy",
+      "gold": {
+        "id": "T-2003",
+        "verdict": "NO_REFUND",
+        "amount_cents": 0,
+        "reason_code": "POLICY"
+      },
+      "facts": {
+        "amounts_cents": [
+          21000,
+          3300
+        ]
+      },
+      "mode": "icl",
+      "generation": "<<TICKET>>\nid: T-2003\nverdict: NO_REFUND\namount_cents: 21000\nreason_code: POLICY\nnote: Customer is demanding immediate refund; deny under policy.\n<</TICKET>>",
+      "non_empty": true,
+      "no_role_leak": true,
+      "has_ticket_tags": true,
+      "parsed_ok": true,
+      "id_match": true,
+      "verdict_match": true,
+      "amount_match": false,
+      "reason_match": true,
+      "verdict_allowed": true,
+      "reason_allowed": true,
+      "note_facts_pass": true,
+      "predicted": {
+        "id": "T-2003",
+        "verdict": "NO_REFUND",
+        "amount_cents": 21000,
+        "reason_code": "POLICY",
+        "note": "Customer is demanding immediate refund; deny under policy."
+      },
+      "format_pass": true,
+      "task_pass": false,
+      "preview": "<<TICKET>> | id: T-2003 | verdict: NO_REFUND | amount_cents: 21000 | reason_code: POLICY | note: Customer is demanding immediate refund; deny under policy. | <</TICKET>>"
+    },
+    {
+      "trace_id": "T-2004",
+      "family": "other",
+      "gold": {
+        "id": "T-2004",
+        "verdict": "NO_REFUND",
+        "amount_cents": 0,
+        "reason_code": "OTHER"
+      },
+      "facts": {
+        "amounts_cents": [
+          6700
+        ]
+      },
+      "mode": "icl",
+      "generation": "<<TICKET>>\nid: T-2004\nverdict: NO_REFUND\namount_cents: 6700\nreason_code: OTHER\nnote: Icon issue; cancel plan and refund.\n<</TICKET>>",
+      "non_empty": true,
+      "no_role_leak": true,
+      "has_ticket_tags": true,
+      "parsed_ok": true,
+      "id_match": true,
+      "verdict_match": true,
+      "amount_match": false,
+      "reason_match": true,
+      "verdict_allowed": true,
+      "reason_allowed": true,
+      "note_facts_pass": true,
+      "predicted": {
+        "id": "T-2004",
+        "verdict": "NO_REFUND",
+        "amount_cents": 6700,
+        "reason_code": "OTHER",
+        "note": "Icon issue; cancel plan and refund."
+      },
+      "format_pass": true,
+      "task_pass": false,
+      "preview": "<<TICKET>> | id: T-2004 | verdict: NO_REFUND | amount_cents: 6700 | reason_code: OTHER | note: Icon issue; cancel plan and refund. | <</TICKET>>"
+    },
+    {
+      "trace_id": "T-2005",
+      "family": "other",
+      "gold": {
+        "id": "T-2005",
+        "verdict": "ESCALATE",
+        "amount_cents": 0,
+        "reason_code": "OTHER"
+      },
+      "facts": {
+        "amounts_cents": []
+      },
+      "mode": "icl",
+      "generation": "<<TICKET>>\nid: T-2005\nverdict: ESCALATE\namount_cents: 0\nreason_code: OTHER\nnote: Webhook retries causing quota exhaustion; escalate to engineering.\n<</TICKET>>",
+      "non_empty": true,
+      "no_role_leak": true,
+      "has_ticket_tags": true,
+      "parsed_ok": true,
+      "id_match": true,
+      "verdict_match": true,
+      "amount_match": true,
+      "reason_match": true,
+      "verdict_allowed": true,
+      "reason_allowed": true,
+      "note_facts_pass": true,
+      "predicted": {
+        "id": "T-2005",
+        "verdict": "ESCALATE",
+        "amount_cents": 0,
+        "reason_code": "OTHER",
+        "note": "Webhook retries causing quota exhaustion; escalate to engineering."
+      },
+      "format_pass": true,
+      "task_pass": true,
+      "preview": "<<TICKET>> | id: T-2005 | verdict: ESCALATE | amount_cents: 0 | reason_code: OTHER | note: Webhook retries causing quota exhaustion; escalate to engineering. | <</TICKET>>"
+    },
+    {
+      "trace_id": "T-2006",
+      "family": "duplicate",
+      "gold": {
+        "id": "T-2006",
+        "verdict": "REFUND",
+        "amount_cents": 12000,
+        "reason_code": "DUPLICATE"
+      },
+      "facts": {
+        "amounts_cents": [
+          12000
+        ]
+      },
+      "mode": "icl",
+      "generation": "<<TICKET>>\nid: T-2006\nverdict: REVERSAL\namount_cents: 12000\nreason_code: DUPLICATE\nnote: Duplicate license charge; reverse it.\n<</TICKET>>",
+      "non_empty": true,
+      "no_role_leak": true,
+      "has_ticket_tags": true,
+      "parsed_ok": true,
+      "id_match": true,
+      "verdict_match": false,
+      "amount_match": true,
+      "reason_match": true,
+      "verdict_allowed": false,
+      "reason_allowed": true,
+      "note_facts_pass": true,
+      "predicted": {
+        "id": "T-2006",
+        "verdict": "REVERSAL",
+        "amount_cents": 12000,
+        "reason_code": "DUPLICATE",
+        "note": "Duplicate license charge; reverse it."
+      },
+      "format_pass": false,
+      "task_pass": false,
+      "preview": "<<TICKET>> | id: T-2006 | verdict: REVERSAL | amount_cents: 12000 | reason_code: DUPLICATE | note: Duplicate license charge; reverse it. | <</TICKET>>"
+    }
+  ]
+}

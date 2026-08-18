@@ -1,0 +1,230 @@
+{
+  "source": "adapter",
+  "base_model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "adapter": "outputs/lora-sft-4",
+  "mode": "thin",
+  "n": 6,
+  "summary": {
+    "non_empty": 1.0,
+    "no_role_leak": 1.0,
+    "has_ticket_tags": 1.0,
+    "parsed_ok": 0.5,
+    "id_match": 0.5,
+    "verdict_match": 0.3333333333333333,
+    "amount_match": 0.5,
+    "reason_match": 0.0,
+    "format_pass": 0.16666666666666666,
+    "task_pass": 0.0,
+    "note_facts_pass": 0.3333333333333333
+  },
+  "per_prompt": [
+    {
+      "trace_id": "T-2001",
+      "family": "duplicate",
+      "gold": {
+        "id": "T-2001",
+        "verdict": "REFUND",
+        "amount_cents": 4500,
+        "reason_code": "DUPLICATE"
+      },
+      "facts": {
+        "amounts_cents": [
+          4500,
+          2001
+        ]
+      },
+      "mode": "thin",
+      "generation": "<<TICKET>>\nid: T-2001\nverdict: REFUND\namount_cents: 4500\nreason_code: DUPLICATE_INVOICE\nnote: Duplicate invoice ID (INV-2001) leads to double billing; refund the excess amount.\n<</TICKET>>",
+      "non_empty": true,
+      "no_role_leak": true,
+      "has_ticket_tags": true,
+      "parsed_ok": true,
+      "id_match": true,
+      "verdict_match": true,
+      "amount_match": true,
+      "reason_match": false,
+      "verdict_allowed": true,
+      "reason_allowed": false,
+      "note_facts_pass": false,
+      "predicted": {
+        "id": "T-2001",
+        "verdict": "REFUND",
+        "amount_cents": 4500,
+        "reason_code": "DUPLICATE_INVOICE",
+        "note": "Duplicate invoice ID (INV-2001) leads to double billing; refund the excess amount."
+      },
+      "format_pass": false,
+      "task_pass": false,
+      "preview": "<<TICKET>> | id: T-2001 | verdict: REFUND | amount_cents: 4500 | reason_code: DUPLICATE_INVOICE | note: Duplicate invoice ID (INV-2001) leads to double billing; refund the excess a"
+    },
+    {
+      "trace_id": "T-2002",
+      "family": "fraud",
+      "gold": {
+        "id": "T-2002",
+        "verdict": "ESCALATE",
+        "amount_cents": 0,
+        "reason_code": "FRAUD"
+      },
+      "facts": {
+        "amounts_cents": []
+      },
+      "mode": "thin",
+      "generation": "<<TICKET>>\nid: T-2002\nverdict: NO_Violation\namount_cents: 0\nreason_code: OTHER\nnote: Do not proceed; no violation as no purchase was made.\n<</TICKET>>",
+      "non_empty": true,
+      "no_role_leak": true,
+      "has_ticket_tags": true,
+      "parsed_ok": true,
+      "id_match": true,
+      "verdict_match": false,
+      "amount_match": true,
+      "reason_match": false,
+      "verdict_allowed": false,
+      "reason_allowed": true,
+      "note_facts_pass": true,
+      "predicted": {
+        "id": "T-2002",
+        "verdict": "NO_VIOLATION",
+        "amount_cents": 0,
+        "reason_code": "OTHER",
+        "note": "Do not proceed; no violation as no purchase was made."
+      },
+      "format_pass": false,
+      "task_pass": false,
+      "preview": "<<TICKET>> | id: T-2002 | verdict: NO_Violation | amount_cents: 0 | reason_code: OTHER | note: Do not proceed; no violation as no purchase was made. | <</TICKET>>"
+    },
+    {
+      "trace_id": "T-2003",
+      "family": "policy",
+      "gold": {
+        "id": "T-2003",
+        "verdict": "NO_REFUND",
+        "amount_cents": 0,
+        "reason_code": "POLICY"
+      },
+      "facts": {
+        "amounts_cents": [
+          21000,
+          3300
+        ]
+      },
+      "mode": "thin",
+      "generation": "<<TICKET>>\nid: T-2003\nverdict: NO_REFUND\namount_cents: 0\nreason_code: OTHER\nnote: Yelling cannot be ignored; proceed with refund.\n<</TICKET>>",
+      "non_empty": true,
+      "no_role_leak": true,
+      "has_ticket_tags": true,
+      "parsed_ok": true,
+      "id_match": true,
+      "verdict_match": true,
+      "amount_match": true,
+      "reason_match": false,
+      "verdict_allowed": true,
+      "reason_allowed": true,
+      "note_facts_pass": true,
+      "predicted": {
+        "id": "T-2003",
+        "verdict": "NO_REFUND",
+        "amount_cents": 0,
+        "reason_code": "OTHER",
+        "note": "Yelling cannot be ignored; proceed with refund."
+      },
+      "format_pass": true,
+      "task_pass": false,
+      "preview": "<<TICKET>> | id: T-2003 | verdict: NO_REFUND | amount_cents: 0 | reason_code: OTHER | note: Yelling cannot be ignored; proceed with refund. | <</TICKET>>"
+    },
+    {
+      "trace_id": "T-2004",
+      "family": "other",
+      "gold": {
+        "id": "T-2004",
+        "verdict": "NO_REFUND",
+        "amount_cents": 0,
+        "reason_code": "OTHER"
+      },
+      "facts": {
+        "amounts_cents": [
+          6700
+        ]
+      },
+      "mode": "thin",
+      "generation": "<<TICKET>>\nid: T-2004\nverdict: CANCEL\namount_cents: 6700\nreason_code: OTHER\n<</TICKET>>",
+      "non_empty": true,
+      "no_role_leak": true,
+      "has_ticket_tags": true,
+      "parsed_ok": false,
+      "id_match": false,
+      "verdict_match": false,
+      "amount_match": false,
+      "reason_match": false,
+      "verdict_allowed": false,
+      "reason_allowed": false,
+      "note_facts_pass": false,
+      "predicted": null,
+      "format_pass": false,
+      "task_pass": false,
+      "preview": "<<TICKET>> | id: T-2004 | verdict: CANCEL | amount_cents: 6700 | reason_code: OTHER | <</TICKET>>"
+    },
+    {
+      "trace_id": "T-2005",
+      "family": "other",
+      "gold": {
+        "id": "T-2005",
+        "verdict": "ESCALATE",
+        "amount_cents": 0,
+        "reason_code": "OTHER"
+      },
+      "facts": {
+        "amounts_cents": []
+      },
+      "mode": "thin",
+      "generation": "<<TICKET>>\nid: T-2005\nverdict: DUPLICATE\nreason_code: QUOTA_EXHAUSTED\namount_cents: 0\nstatus_code: UNKNOWN\nreason_code_en: QUOTA_EXHAUSTED\nreason_text_en: Quota exceeded; duplicate entry.\n<</TICKET>>",
+      "non_empty": true,
+      "no_role_leak": true,
+      "has_ticket_tags": true,
+      "parsed_ok": false,
+      "id_match": false,
+      "verdict_match": false,
+      "amount_match": false,
+      "reason_match": false,
+      "verdict_allowed": false,
+      "reason_allowed": false,
+      "note_facts_pass": false,
+      "predicted": null,
+      "format_pass": false,
+      "task_pass": false,
+      "preview": "<<TICKET>> | id: T-2005 | verdict: DUPLICATE | reason_code: QUOTA_EXHAUSTED | amount_cents: 0 | status_code: UNKNOWN | reason_code_en: QUOTA_EXHAUSTED | reason_text_en: Quota excee"
+    },
+    {
+      "trace_id": "T-2006",
+      "family": "duplicate",
+      "gold": {
+        "id": "T-2006",
+        "verdict": "REFUND",
+        "amount_cents": 12000,
+        "reason_code": "DUPLICATE"
+      },
+      "facts": {
+        "amounts_cents": [
+          12000
+        ]
+      },
+      "mode": "thin",
+      "generation": "<<TICKET>>\nid: T-2006\nverdict: NO_Violation\namount_cents: -12000\n<</TICKET>>",
+      "non_empty": true,
+      "no_role_leak": true,
+      "has_ticket_tags": true,
+      "parsed_ok": false,
+      "id_match": false,
+      "verdict_match": false,
+      "amount_match": false,
+      "reason_match": false,
+      "verdict_allowed": false,
+      "reason_allowed": false,
+      "note_facts_pass": false,
+      "predicted": null,
+      "format_pass": false,
+      "task_pass": false,
+      "preview": "<<TICKET>> | id: T-2006 | verdict: NO_Violation | amount_cents: -12000 | <</TICKET>>"
+    }
+  ]
+}

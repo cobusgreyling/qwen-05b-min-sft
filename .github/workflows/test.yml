@@ -1,0 +1,21 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  cpu:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Unit tests (no torch)
+        run: python src/test_pipeline.py -v
+      - name: Materialize splits
+        run: python src/write_data.py
+      - name: Compare is a no-op without evals
+        run: python src/compare.py || true

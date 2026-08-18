@@ -1,7 +1,8 @@
 {
   "source": "adapter",
   "base_model": "Qwen/Qwen2.5-0.5B-Instruct",
-  "adapter": "outputs/lora-sft",
+  "adapter": "outputs/lora-sft-16",
+  "mode": "thin",
   "n": 6,
   "summary": {
     "non_empty": 1.0,
@@ -9,12 +10,12 @@
     "has_ticket_tags": 1.0,
     "parsed_ok": 1.0,
     "id_match": 1.0,
-    "verdict_match": 0.8333333333333334,
-    "amount_match": 0.8333333333333334,
-    "reason_match": 0.6666666666666666,
-    "format_pass": 0.6666666666666666,
-    "task_pass": 0.6666666666666666,
-    "note_facts_pass": 0.8333333333333334
+    "verdict_match": 1.0,
+    "amount_match": 1.0,
+    "reason_match": 1.0,
+    "format_pass": 1.0,
+    "task_pass": 1.0,
+    "note_facts_pass": 1.0
   },
   "per_prompt": [
     {
@@ -26,7 +27,14 @@
         "amount_cents": 4500,
         "reason_code": "DUPLICATE"
       },
-      "generation": "<<TICKET>>\nid: T-2001\nverdict: REFUND\namount_cents: 4500\nreason_code: DUPLICATE\nnote: Duplicate invoice ID; refund the second charge.\n<</TICKET>>",
+      "facts": {
+        "amounts_cents": [
+          4500,
+          2001
+        ]
+      },
+      "mode": "thin",
+      "generation": "<<TICKET>>\nid: T-2001\nverdict: REFUND\namount_cents: 4500\nreason_code: DUPLICATE\nnote: Invoice is already refunded; no refund for double billing.\n<</TICKET>>",
       "non_empty": true,
       "no_role_leak": true,
       "has_ticket_tags": true,
@@ -37,23 +45,17 @@
       "reason_match": true,
       "verdict_allowed": true,
       "reason_allowed": true,
+      "note_facts_pass": true,
       "predicted": {
         "id": "T-2001",
         "verdict": "REFUND",
         "amount_cents": 4500,
         "reason_code": "DUPLICATE",
-        "note": "Duplicate invoice ID; refund the second charge."
+        "note": "Invoice is already refunded; no refund for double billing."
       },
       "format_pass": true,
       "task_pass": true,
-      "preview": "<<TICKET>> | id: T-2001 | verdict: REFUND | amount_cents: 4500 | reason_code: DUPLICATE | note: Duplicate invoice ID; refund the second charge. | <</TICKET>>",
-      "note_facts_pass": true,
-      "facts": {
-        "amounts_cents": [
-          4500,
-          2001
-        ]
-      }
+      "preview": "<<TICKET>> | id: T-2001 | verdict: REFUND | amount_cents: 4500 | reason_code: DUPLICATE | note: Invoice is already refunded; no refund for double billing. | <</TICKET>>"
     },
     {
       "trace_id": "T-2002",
@@ -64,7 +66,11 @@
         "amount_cents": 0,
         "reason_code": "FRAUD"
       },
-      "generation": "<<TICKET>>\nid: T-2002\nverdict: ESCALATE\namount_cents: 0\nreason_code: FRAUD\nnote: Fraudulent behavior; escalate against the fraud team.\n<</TICKET>>",
+      "facts": {
+        "amounts_cents": []
+      },
+      "mode": "thin",
+      "generation": "<<TICKET>>\nid: T-2002\nverdict: ESCALATE\namount_cents: 0\nreason_code: FRAUD\nnote: Unauthorized overseas charge; escalate to fraud.\n<</TICKET>>",
       "non_empty": true,
       "no_role_leak": true,
       "has_ticket_tags": true,
@@ -75,20 +81,17 @@
       "reason_match": true,
       "verdict_allowed": true,
       "reason_allowed": true,
+      "note_facts_pass": true,
       "predicted": {
         "id": "T-2002",
         "verdict": "ESCALATE",
         "amount_cents": 0,
         "reason_code": "FRAUD",
-        "note": "Fraudulent behavior; escalate against the fraud team."
+        "note": "Unauthorized overseas charge; escalate to fraud."
       },
       "format_pass": true,
       "task_pass": true,
-      "preview": "<<TICKET>> | id: T-2002 | verdict: ESCALATE | amount_cents: 0 | reason_code: FRAUD | note: Fraudulent behavior; escalate against the fraud team. | <</TICKET>>",
-      "note_facts_pass": true,
-      "facts": {
-        "amounts_cents": []
-      }
+      "preview": "<<TICKET>> | id: T-2002 | verdict: ESCALATE | amount_cents: 0 | reason_code: FRAUD | note: Unauthorized overseas charge; escalate to fraud. | <</TICKET>>"
     },
     {
       "trace_id": "T-2003",
@@ -99,7 +102,14 @@
         "amount_cents": 0,
         "reason_code": "POLICY"
       },
-      "generation": "<<TICKET>>\nid: T-2003\nverdict: NO_REFUND\namount_cents: 0\nreason_code: POLICY\nnote: Asked amount (3300) exceeds invoice (4900), refuse under policy.\n<</TICKET>>",
+      "facts": {
+        "amounts_cents": [
+          21000,
+          3300
+        ]
+      },
+      "mode": "thin",
+      "generation": "<<TICKET>>\nid: T-2003\nverdict: NO_REFUND\namount_cents: 0\nreason_code: POLICY\nnote: Asked 21000 exceeds invoice 3300; refuse under policy.\n<</TICKET>>",
       "non_empty": true,
       "no_role_leak": true,
       "has_ticket_tags": true,
@@ -110,23 +120,17 @@
       "reason_match": true,
       "verdict_allowed": true,
       "reason_allowed": true,
+      "note_facts_pass": true,
       "predicted": {
         "id": "T-2003",
         "verdict": "NO_REFUND",
         "amount_cents": 0,
         "reason_code": "POLICY",
-        "note": "Asked amount (3300) exceeds invoice (4900), refuse under policy."
+        "note": "Asked 21000 exceeds invoice 3300; refuse under policy."
       },
       "format_pass": true,
       "task_pass": true,
-      "preview": "<<TICKET>> | id: T-2003 | verdict: NO_REFUND | amount_cents: 0 | reason_code: POLICY | note: Asked amount (3300) exceeds invoice (4900), refuse under policy. | <</TICKET>>",
-      "note_facts_pass": false,
-      "facts": {
-        "amounts_cents": [
-          21000,
-          3300
-        ]
-      }
+      "preview": "<<TICKET>> | id: T-2003 | verdict: NO_REFUND | amount_cents: 0 | reason_code: POLICY | note: Asked 21000 exceeds invoice 3300; refuse under policy. | <</TICKET>>"
     },
     {
       "trace_id": "T-2004",
@@ -137,33 +141,34 @@
         "amount_cents": 0,
         "reason_code": "OTHER"
       },
-      "generation": "<<TICKET>>\nid: T-2004\nverdict: CANCEL\namount_cents: 6700\nreason_code: POLICY\nnote: Ugly icon; cancel plan, refund 6700 cents; no break.\n<</TICKET>>",
+      "facts": {
+        "amounts_cents": [
+          6700
+        ]
+      },
+      "mode": "thin",
+      "generation": "<<TICKET>>\nid: T-2004\nverdict: NO_REFUND\namount_cents: 0\nreason_code: OTHER\nnote: Taste complaint is not a defect; no refund.\n<</TICKET>>",
       "non_empty": true,
       "no_role_leak": true,
       "has_ticket_tags": true,
       "parsed_ok": true,
       "id_match": true,
-      "verdict_match": false,
-      "amount_match": false,
-      "reason_match": false,
-      "verdict_allowed": false,
+      "verdict_match": true,
+      "amount_match": true,
+      "reason_match": true,
+      "verdict_allowed": true,
       "reason_allowed": true,
+      "note_facts_pass": true,
       "predicted": {
         "id": "T-2004",
-        "verdict": "CANCEL",
-        "amount_cents": 6700,
-        "reason_code": "POLICY",
-        "note": "Ugly icon; cancel plan, refund 6700 cents; no break."
+        "verdict": "NO_REFUND",
+        "amount_cents": 0,
+        "reason_code": "OTHER",
+        "note": "Taste complaint is not a defect; no refund."
       },
-      "format_pass": false,
-      "task_pass": false,
-      "preview": "<<TICKET>> | id: T-2004 | verdict: CANCEL | amount_cents: 6700 | reason_code: POLICY | note: Ugly icon; cancel plan, refund 6700 cents; no break. | <</TICKET>>",
-      "note_facts_pass": true,
-      "facts": {
-        "amounts_cents": [
-          6700
-        ]
-      }
+      "format_pass": true,
+      "task_pass": true,
+      "preview": "<<TICKET>> | id: T-2004 | verdict: NO_REFUND | amount_cents: 0 | reason_code: OTHER | note: Taste complaint is not a defect; no refund. | <</TICKET>>"
     },
     {
       "trace_id": "T-2005",
@@ -174,7 +179,11 @@
         "amount_cents": 0,
         "reason_code": "OTHER"
       },
-      "generation": "<<TICKET>>\nid: T-2005\nverdict: ESCALATE\namount_cents: 0\nreason_code: QUOTA\nnote: Partner webhook retrying in a loop; escalate.\n<</TICKET>>",
+      "facts": {
+        "amounts_cents": []
+      },
+      "mode": "thin",
+      "generation": "<<TICKET>>\nid: T-2005\nverdict: ESCALATE\namount_cents: 0\nreason_code: OTHER\nnote: Webhook storm plus blank page; escalate.\n<</TICKET>>",
       "non_empty": true,
       "no_role_leak": true,
       "has_ticket_tags": true,
@@ -182,23 +191,20 @@
       "id_match": true,
       "verdict_match": true,
       "amount_match": true,
-      "reason_match": false,
+      "reason_match": true,
       "verdict_allowed": true,
-      "reason_allowed": false,
+      "reason_allowed": true,
+      "note_facts_pass": true,
       "predicted": {
         "id": "T-2005",
         "verdict": "ESCALATE",
         "amount_cents": 0,
-        "reason_code": "QUOTA",
-        "note": "Partner webhook retrying in a loop; escalate."
+        "reason_code": "OTHER",
+        "note": "Webhook storm plus blank page; escalate."
       },
-      "format_pass": false,
-      "task_pass": false,
-      "preview": "<<TICKET>> | id: T-2005 | verdict: ESCALATE | amount_cents: 0 | reason_code: QUOTA | note: Partner webhook retrying in a loop; escalate. | <</TICKET>>",
-      "note_facts_pass": true,
-      "facts": {
-        "amounts_cents": []
-      }
+      "format_pass": true,
+      "task_pass": true,
+      "preview": "<<TICKET>> | id: T-2005 | verdict: ESCALATE | amount_cents: 0 | reason_code: OTHER | note: Webhook storm plus blank page; escalate. | <</TICKET>>"
     },
     {
       "trace_id": "T-2006",
@@ -209,6 +215,12 @@
         "amount_cents": 12000,
         "reason_code": "DUPLICATE"
       },
+      "facts": {
+        "amounts_cents": [
+          12000
+        ]
+      },
+      "mode": "thin",
       "generation": "<<TICKET>>\nid: T-2006\nverdict: REFUND\namount_cents: 12000\nreason_code: DUPLICATE\nnote: Duplicate seat license; refund the extra 12000 cents.\n<</TICKET>>",
       "non_empty": true,
       "no_role_leak": true,
@@ -220,6 +232,7 @@
       "reason_match": true,
       "verdict_allowed": true,
       "reason_allowed": true,
+      "note_facts_pass": true,
       "predicted": {
         "id": "T-2006",
         "verdict": "REFUND",
@@ -229,13 +242,7 @@
       },
       "format_pass": true,
       "task_pass": true,
-      "preview": "<<TICKET>> | id: T-2006 | verdict: REFUND | amount_cents: 12000 | reason_code: DUPLICATE | note: Duplicate seat license; refund the extra 12000 cents. | <</TICKET>>",
-      "note_facts_pass": true,
-      "facts": {
-        "amounts_cents": [
-          12000
-        ]
-      }
+      "preview": "<<TICKET>> | id: T-2006 | verdict: REFUND | amount_cents: 12000 | reason_code: DUPLICATE | note: Duplicate seat license; refund the extra 12000 cents. | <</TICKET>>"
     }
   ]
 }

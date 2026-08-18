@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import sys
 from pathlib import Path
@@ -16,6 +17,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from common import DATA, MODEL_ID, OUTPUTS, load_jsonl  # noqa: E402
+from dataset import CURVE_IDS, curve_rows  # noqa: E402
 
 LORA_TARGETS = [
     "q_proj",
@@ -34,7 +36,20 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--holdout", type=Path, default=DATA / "holdout.jsonl")
     p.add_argument("--model", default=os.environ.get("SFT_MODEL", MODEL_ID))
     p.add_argument("--output-dir", type=Path, default=OUTPUTS / "lora-sft")
-    p.add_argument("--max-steps", type=int, default=40)
+    p.add_argument(
+        "--curve",
+        type=int,
+        choices=sorted(CURVE_IDS),
+        default=None,
+        help="Train the n-card curve subset instead of --train.",
+    )
+    p.add_argument(
+        "--max-steps",
+        type=int,
+        default=None,
+        help="Override step count. Default is --epochs × n / (batch × accum).",
+    )
+    p.add_argument("--epochs", type=float, default=10.0)
     p.add_argument("--max-length", type=int, default=384)
     p.add_argument("--batch-size", type=int, default=1)
     p.add_argument("--grad-accum", type=int, default=2)
@@ -55,17 +70,28 @@ def load_sft_jsonl(path: Path):
 
 def main() -> int:
     args = parse_args()
-    if not args.train.exists():
-        print(f"ERROR: {args.train} missing. Run: python src/write_data.py", file=sys.stderr)
-        return 1
+    if args.curve is not None:
+        from datasets import Dataset
+
+        rows = [{"prompt": r["prompt"], "completion": r["completion"]} for r in curve_rows(args.curve)]
+        train_ds = Dataset.from_list(rows)
+        if args.output_dir == OUTPUTS / "lora-sft":
+            args.output_dir = OUTPUTS / f"lora-sft-{args.curve}"
+    else:
+        if not args.train.exists():
+            print(f"ERROR: {args.train} missing. Run: python src/write_data.py", file=sys.stderr)
+            return 1
+        train_ds = load_sft_jsonl(args.train)
 
     import torch
     from peft import LoraConfig
     from transformers import AutoModelForCausalLM, AutoTokenizer
     from trl import SFTConfig, SFTTrainer
 
-    train_ds = load_sft_jsonl(args.train)
     eval_ds = load_sft_jsonl(args.holdout) if args.holdout.exists() else None
+    effective_batch = max(args.batch_size * args.grad_accum, 1)
+    if args.max_steps is None:
+        args.max_steps = max(1, math.ceil(args.epochs * len(train_ds) / effective_batch))
 
     use_cuda = torch.cuda.is_available()
     use_mps = (
@@ -167,6 +193,8 @@ def main() -> int:
     card = {
         "base_model": args.model,
         "max_steps": args.max_steps,
+        "epochs": args.epochs,
+        "curve": args.curve,
         "max_length": args.max_length,
         "learning_rate": args.lr,
         "lora_r": args.lora_r,
@@ -174,6 +202,11 @@ def main() -> int:
         "train_samples": len(train_ds),
         "holdout_samples": len(eval_ds) if eval_ds is not None else 0,
         "test_samples": 0,
+        "stack": {
+            "transformers": __import__("transformers").__version__,
+            "trl": __import__("trl").__version__,
+            "peft": __import__("peft").__version__,
+        },
         "metrics": metrics,
     }
     (args.output_dir / "run_card.json").write_text(json.dumps(card, indent=2))

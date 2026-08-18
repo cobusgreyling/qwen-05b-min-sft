@@ -20,4 +20,8 @@ note: <one short sentence>
 | `reason_code` | One of the four labels |
 | `note` | One sentence; not scored for wording |
 
-The system prompt only names the clerk. The card layout lives in the eight training completions.
+The thin system prompt only names the clerk. The card layout lives in the eight training completions.
+
+`note` is not scored for wording. It **is** scored for invented numbers (`note_facts_pass`): every integer in the note must appear on the ticket or in `facts.amounts_cents`. T-2003 is the worked example — a correct `NO_REFUND` / `POLICY` card that writes `4900` fails facts.
+
+`data/train_extra.jsonl` and `data/curve/train_{2,4,8,16}.jsonl` are the data-size curve. They do not replace the 8-card lab.

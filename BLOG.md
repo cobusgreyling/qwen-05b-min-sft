@@ -14,9 +14,9 @@ That is not a bug. It was trained to chat. We wanted a **ticket card** — a rig
 
 The question for this lab: **how little labeled data does that take?**
 
-Answer we actually ran: **8 training cards.** 40 LoRA steps. About 25 seconds on Apple MPS (a Colab T4 is in the same ballpark once the weights are cached). Frozen test, never seen by the trainer: **format 0% → 100% tagged cards, task 0% → 67%.**
+Answer we actually ran: **8 training cards.** 40 LoRA steps. About 25 seconds on Apple MPS (a Colab T4 is in the same ballpark once the weights are cached). Frozen test, never seen by the trainer: **tags 0 / 6 → 6 / 6, task 0 / 6 → 4 / 6.** A schema prompt still scores 0 / 6. Eight-shot ICL gets the wrapper (6 / 6) and only 2 / 6 task. Sixteen cards, same recipe: **6 / 6**.
 
-Companion: `demos/qwen-05b-min-sft/colab_qwen_05b_min_sft.ipynb`. Open it in Colab, **Runtime → GPU (T4)**, run all.
+Companion: [`colab_qwen_05b_min_sft.ipynb`](colab_qwen_05b_min_sft.ipynb). Open it in Colab, **Runtime → GPU (T4)**, run all.
 
 ---
 
@@ -182,8 +182,9 @@ The test is:
 | `has_ticket_tags` | Both `<<TICKET>>` and `<</TICKET>>` are present |
 | `format_pass` | Parseable card, allowed verdict, allowed reason, no role leak |
 | `task_pass` | Format **and** `id` / `verdict` / `amount_cents` / `reason_code` match gold |
+| `note_facts_pass` | Every integer in `note` appears on the ticket |
 
-`note` is not scored for wording. We want the wrapper and the decision, not a copied sentence.
+`note` is not scored for wording. We want the wrapper and the decision, not a copied sentence. Facts catch the other failure: a correct policy card that invents `4900`.
 
 Gold cards all pass this scorer before anyone trains. If they did not, the test would be broken.
 
@@ -205,8 +206,9 @@ Every reply is an apology or a request for more details. T-2006 even invents `T-
 | `id_match` | **6 / 6** |
 | `verdict_match` | 5 / 6 |
 | `reason_match` | 4 / 6 |
-| `format_pass` | **67%** |
+| `format_pass` | **67%** (4 / 6) |
 | `task_pass` | **67%** (4 / 6) |
+| `note_facts_pass` | **83%** (5 / 6) — T-2003 invented `4900` |
 
 Same six user tickets:
 
@@ -255,26 +257,31 @@ Colab is the path. Upload `colab_qwen_05b_min_sft.ipynb`, set a T4, run all.
 The notebook does the comparison in this order on purpose:
 
 ```
-write 8/4/6 cards
+clone repo, import src/
+     → write 8/4/6 cards
      → show the mask
-     → score stock 0.5B on test     # BEFORE
+     → score stock 0.5B three ways     # thin / schema / 8-shot ICL
      → LoRA on the 8 train cards
-     → score adapter on the same 6  # AFTER
+     → score adapter on the same 6     # AFTER
      → print the table + side-by-side
      → optional: type a new ticket
 ```
 
-If you clone the folder locally:
+If you clone the repo locally:
 
 ```bash
-cd demos/qwen-05b-min-sft
+git clone https://github.com/cobusgreyling/qwen-05b-min-sft.git
+cd qwen-05b-min-sft
 ./run.sh data
-./run.sh train
 ./run.sh eval-base
+./run.sh eval-schema
+./run.sh eval-icl
+./run.sh train
 ./run.sh eval
+./run.sh compare
 ```
 
-`outputs/base_eval.json` and `outputs/adapter_eval.json` are the two pictures. Diff the `summary` blocks, then read `per_prompt[].generation`.
+`outputs/RESULTS.md` is the table. The JSON files under `outputs/` are the pictures. Diff `summary`, then read `per_prompt[].generation`.
 
 A ticket the trainer never saw is the last check. In the notebook:
 
@@ -295,17 +302,60 @@ If SFT worked you get a card, not an essay.
 | Student | Qwen2.5-0.5B-Instruct + LoRA r=8 |
 | Steps / wall | 40 / 24.6 s (MPS) |
 | Train loss | 3.29 → ~0.01 (mean 0.61) |
-| Stock `task_pass` | **0%** |
-| Adapter `task_pass` | **67%** |
-| Adapter `<<TICKET>>` tags | **6 / 6** |
+| Stock `task_pass` | **0 / 6** |
+| Schema-prompt `task_pass` | **0 / 6** |
+| 8-shot ICL `task_pass` | **2 / 6** |
+| Adapter (8) `task_pass` | **4 / 6** |
+| Adapter (16) `task_pass` | **6 / 6** |
+| Adapter (8) `<<TICKET>>` tags | **6 / 6** |
+| Adapter (8) `note_facts` | **5 / 6** |
+
+---
+
+## 5. Prompting first
+
+The obvious objection: *you just needed a better prompt.*
+
+Same 6 tickets. Same greedy decode. No adapter.
+
+| Condition | Tags | `format_pass` | `task_pass` |
+|-----------|-----:|--------------:|------------:|
+| stock thin | 0 / 6 | 0 / 6 | 0 / 6 |
+| stock + schema in the system prompt | 0 / 6 | 0 / 6 | 0 / 6 |
+| 8-shot ICL (the train cards in context) | **6 / 6** | 5 / 6 | 2 / 6 |
+| 8-card LoRA | **6 / 6** | 4 / 6 | **4 / 6** |
+
+The schema prompt is not a silent win. 0.5B writes field-ish lines (`id: T-2001`, `verdict: REFUND`) and still never emits `<<TICKET>>`. Amounts come out wrong (`450` instead of `4500`, `-12000`, `10000` invented). Putting the contract in the prompt is not the same as teaching it.
+
+Eight-shot ICL *does* copy the wrapper. Then it invents `verdict: REVERSAL` on T-2006, escalates a duplicate charge (T-2001), and refunds the asked `21000` / `6700` instead of writing `0`. The shape transfers. The policy does not.
+
+That is why the 8-card LoRA is the interesting row: same thin prompt as stock, **4 / 6** task against ICL's **2 / 6**.
+
+---
+
+## 6. The data-size curve
+
+Same recipe, more (or fewer) labeled cards. Ten epochs. Frozen test never loaded.
+
+| n | Tags | `format_pass` | `task_pass` | `note_facts` |
+|--:|-----:|--------------:|------------:|-------------:|
+| 2 | 4 / 6 | 0 / 6 | 0 / 6 | 0 / 6 |
+| 4 | 6 / 6 | 1 / 6 | 0 / 6 | 2 / 6 |
+| 8 | 6 / 6 | 4 / 6 | 4 / 6 | 5 / 6 |
+| 16 | 6 / 6 | 6 / 6 | 6 / 6 | 6 / 6 |
+
+Two cards (one refund, one escalate) start the wrapper and do not lock the schema. Four cards — one per family — get `<<TICKET>>` on every test ticket and still leak `DUPLICATE_INVOICE`, `CANCEL`, `QUOTA_EXHAUSTED`. Eight cards are the first time `task_pass` moves. Sixteen cards add the long-tail paraphrases (`cancel my plan`, `quota is blown`, asked-vs-invoice numbers) and the two 8-card misses go away. T-2003's note becomes `Asked 21000 exceeds invoice 3300`.
+
+`./run.sh curve` reproduces this. The notebook stays on the 8-card lab.
 
 ---
 
 ## Takeaways
 
-1. **Least data** here means a *narrow contract*, not a smaller slice of the internet. Eight cards covering four families is enough to move a 0.5B model from prose to a parseable card.
+1. **Least data** here means a *narrow contract*, not a smaller slice of the internet. Eight cards covering four families is enough to move a 0.5B model from prose to a parseable card — and enough to beat a schema prompt and 8-shot ICL on the decision.
 2. **Mask the prompt.** Otherwise you spend gradient on “You are DeskCard” and the customer text.
 3. **Test with the same prompts, before and after.** Loss is a training heartbeat. Improvement is “did the assistant change on tickets the optimizer never saw.”
-4. Eight examples will not teach a full policy. `CANCEL` and `QUOTA` leaked in because those words were in the user text and not in the enum. Add two cards in that family if that is the next failure you care about.
+4. **Score the note for invented numbers.** T-2003 `task_pass`es with a swapped 3300 / 4900. That is a scorer hole unless you name it (`note_facts_pass`).
+5. Eight examples will not teach a full policy. `CANCEL` and `QUOTA` leaked in because those words were in the user text and not in the enum. Add two cards in that family if that is the next failure you care about — that is the 16-card point on the curve.
 
 This is SFT, not a general clerk. Replace the synthetic cards before you claim a desk.

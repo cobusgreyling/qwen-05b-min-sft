@@ -4,8 +4,10 @@ __pycache__/
 .DS_Store
 .ipynb_checkpoints/
 outputs/lora-sft/
+outputs/lora-sft-*/
 *.pt
 *.bin
 *.safetensors
 adapter_model*
 checkpoint-*/
+.venv-train/

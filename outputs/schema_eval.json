@@ -1,7 +1,8 @@
 {
-  "source": "base",
+  "source": "schema",
   "base_model": "Qwen/Qwen2.5-0.5B-Instruct",
   "adapter": null,
+  "mode": "schema",
   "n": 6,
   "summary": {
     "non_empty": 1.0,
@@ -26,7 +27,14 @@
         "amount_cents": 4500,
         "reason_code": "DUPLICATE"
       },
-      "generation": "I'm sorry to hear that you're experiencing billing issues. Could you please provide me with more details about the invoices and any additional charges you've received? This information will help me assist you better.",
+      "facts": {
+        "amounts_cents": [
+          4500,
+          2001
+        ]
+      },
+      "mode": "schema",
+      "generation": "id: T-2001\nverdict: REFUND\namount_cents: 450\nreason_code: DUPLICATE\nnote: Invoice INV-2001 was already charged twice.",
       "non_empty": true,
       "no_role_leak": true,
       "has_ticket_tags": false,
@@ -37,17 +45,11 @@
       "reason_match": false,
       "verdict_allowed": false,
       "reason_allowed": false,
+      "note_facts_pass": false,
       "predicted": null,
       "format_pass": false,
       "task_pass": false,
-      "preview": "I'm sorry to hear that you're experiencing billing issues. Could you please provide me with more details about the invoices and any additional charges you've received? This informa",
-      "note_facts_pass": false,
-      "facts": {
-        "amounts_cents": [
-          4500,
-          2001
-        ]
-      }
+      "preview": "id: T-2001 | verdict: REFUND | amount_cents: 450 | reason_code: DUPLICATE | note: Invoice INV-2001 was already charged twice."
     },
     {
       "trace_id": "T-2002",
@@ -58,7 +60,11 @@
         "amount_cents": 0,
         "reason_code": "FRAUD"
       },
-      "generation": "I'm sorry to hear that you're having trouble using your card. Could you please provide me with more details so I can assist you better?",
+      "facts": {
+        "amounts_cents": []
+      },
+      "mode": "schema",
+      "generation": "id: T-2002\nverdict: ESCALATE\namount_cents: 10000\nreason_code: DUPLICATE\nnote: I had to escalate because someone used my card in Jakarta this morning and I did not buy anything.",
       "non_empty": true,
       "no_role_leak": true,
       "has_ticket_tags": false,
@@ -69,14 +75,11 @@
       "reason_match": false,
       "verdict_allowed": false,
       "reason_allowed": false,
+      "note_facts_pass": false,
       "predicted": null,
       "format_pass": false,
       "task_pass": false,
-      "preview": "I'm sorry to hear that you're having trouble using your card. Could you please provide me with more details so I can assist you better?",
-      "note_facts_pass": false,
-      "facts": {
-        "amounts_cents": []
-      }
+      "preview": "id: T-2002 | verdict: ESCALATE | amount_cents: 10000 | reason_code: DUPLICATE | note: I had to escalate because someone used my card in Jakarta this morning and I did not buy anyth"
     },
     {
       "trace_id": "T-2003",
@@ -87,7 +90,14 @@
         "amount_cents": 0,
         "reason_code": "POLICY"
       },
-      "generation": "I'm sorry to hear that you're experiencing this issue. Could you please provide me with more details so I can assist you better?",
+      "facts": {
+        "amounts_cents": [
+          21000,
+          3300
+        ]
+      },
+      "mode": "schema",
+      "generation": "T-2003\nid: T-2003\nverdict: REFUND\namount_cents: 21000\nreason_code: POLICY\nnote: Customer is yelling about the high price of the item.",
       "non_empty": true,
       "no_role_leak": true,
       "has_ticket_tags": false,
@@ -98,17 +108,11 @@
       "reason_match": false,
       "verdict_allowed": false,
       "reason_allowed": false,
+      "note_facts_pass": false,
       "predicted": null,
       "format_pass": false,
       "task_pass": false,
-      "preview": "I'm sorry to hear that you're experiencing this issue. Could you please provide me with more details so I can assist you better?",
-      "note_facts_pass": false,
-      "facts": {
-        "amounts_cents": [
-          21000,
-          3300
-        ]
-      }
+      "preview": "T-2003 | id: T-2003 | verdict: REFUND | amount_cents: 21000 | reason_code: POLICY | note: Customer is yelling about the high price of the item."
     },
     {
       "trace_id": "T-2004",
@@ -119,7 +123,13 @@
         "amount_cents": 0,
         "reason_code": "OTHER"
       },
-      "generation": "I'm sorry to hear that you're not satisfied with the new icon on your plan. I understand that it's important for us to provide you with the best service possible. Could you please let me know if there are any specific issues or concerns related to this issue? This will help me better assist you in resolving the problem.",
+      "facts": {
+        "amounts_cents": [
+          6700
+        ]
+      },
+      "mode": "schema",
+      "generation": "T-2004\nid: T-2004\nverdict: REFUND\namount_cents: 6700\nreason_code: DUPLICATE\nnote: The ticket was canceled due to a duplicate account.",
       "non_empty": true,
       "no_role_leak": true,
       "has_ticket_tags": false,
@@ -130,16 +140,11 @@
       "reason_match": false,
       "verdict_allowed": false,
       "reason_allowed": false,
+      "note_facts_pass": false,
       "predicted": null,
       "format_pass": false,
       "task_pass": false,
-      "preview": "I'm sorry to hear that you're not satisfied with the new icon on your plan. I understand that it's important for us to provide you with the best service possible. Could you please ",
-      "note_facts_pass": false,
-      "facts": {
-        "amounts_cents": [
-          6700
-        ]
-      }
+      "preview": "T-2004 | id: T-2004 | verdict: REFUND | amount_cents: 6700 | reason_code: DUPLICATE | note: The ticket was canceled due to a duplicate account."
     },
     {
       "trace_id": "T-2005",
@@ -150,7 +155,11 @@
         "amount_cents": 0,
         "reason_code": "OTHER"
       },
-      "generation": "I'm here to assist you. Could you please provide more details about the issue? What steps have you already taken to resolve it?",
+      "facts": {
+        "amounts_cents": []
+      },
+      "mode": "schema",
+      "generation": "T-2005 | REFUND | PARTNER_WEBHOOKS_RETRIES_EXHAUSTED | DUPLICATE",
       "non_empty": true,
       "no_role_leak": true,
       "has_ticket_tags": false,
@@ -161,14 +170,11 @@
       "reason_match": false,
       "verdict_allowed": false,
       "reason_allowed": false,
+      "note_facts_pass": false,
       "predicted": null,
       "format_pass": false,
       "task_pass": false,
-      "preview": "I'm here to assist you. Could you please provide more details about the issue? What steps have you already taken to resolve it?",
-      "note_facts_pass": false,
-      "facts": {
-        "amounts_cents": []
-      }
+      "preview": "T-2005 | REFUND | PARTNER_WEBHOOKS_RETRIES_EXHAUSTED | DUPLICATE"
     },
     {
       "trace_id": "T-2006",
@@ -179,7 +185,13 @@
         "amount_cents": 12000,
         "reason_code": "DUPLICATE"
       },
-      "generation": "T-2007. I apologize for the error in my previous response. Here is the correct way to reverse the seat:\n\nT-2008. Please provide me with the original ticket number or any other relevant information so I can assist you further.",
+      "facts": {
+        "amounts_cents": [
+          12000
+        ]
+      },
+      "mode": "schema",
+      "generation": "T-2006. ID: T-2006\nVERDICT: REFUND\nAMOUNT_CENTS: -12000\nREASON_CODE: DUPLICATE\nNOTE: We apologize for any inconvenience caused.",
       "non_empty": true,
       "no_role_leak": true,
       "has_ticket_tags": false,
@@ -190,16 +202,11 @@
       "reason_match": false,
       "verdict_allowed": false,
       "reason_allowed": false,
+      "note_facts_pass": false,
       "predicted": null,
       "format_pass": false,
       "task_pass": false,
-      "preview": "T-2007. I apologize for the error in my previous response. Here is the correct way to reverse the seat: |  | T-2008. Please provide me with the original ticket number or any other ",
-      "note_facts_pass": false,
-      "facts": {
-        "amounts_cents": [
-          12000
-        ]
-      }
+      "preview": "T-2006. ID: T-2006 | VERDICT: REFUND | AMOUNT_CENTS: -12000 | REASON_CODE: DUPLICATE | NOTE: We apologize for any inconvenience caused."
     }
   ]
 }

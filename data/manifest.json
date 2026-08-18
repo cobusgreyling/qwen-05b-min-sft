@@ -6,6 +6,56 @@
     "holdout": 4,
     "test": 6
   },
+  "extra_ids": [
+    "T-3101",
+    "T-3102",
+    "T-3103",
+    "T-3104",
+    "T-3105",
+    "T-3106",
+    "T-3107",
+    "T-3108"
+  ],
+  "curve": {
+    "2": [
+      "T-1042",
+      "T-3302"
+    ],
+    "4": [
+      "T-1042",
+      "T-3302",
+      "T-8001",
+      "T-6622"
+    ],
+    "8": [
+      "T-1042",
+      "T-2108",
+      "T-3302",
+      "T-4410",
+      "T-8001",
+      "T-5519",
+      "T-6622",
+      "T-7730"
+    ],
+    "16": [
+      "T-1042",
+      "T-2108",
+      "T-3302",
+      "T-4410",
+      "T-8001",
+      "T-5519",
+      "T-6622",
+      "T-7730",
+      "T-3101",
+      "T-3102",
+      "T-3103",
+      "T-3104",
+      "T-3105",
+      "T-3106",
+      "T-3107",
+      "T-3108"
+    ]
+  },
   "train_ids": [
     "T-1042",
     "T-2108",
@@ -30,5 +80,6 @@
     "T-2005",
     "T-2006"
   ],
-  "rule": "split by ticket id; test is frozen; format lives in completions only"
+  "rule": "split by ticket id; test is frozen; format lives in completions only",
+  "stack_pin": "see requirements.txt"
 }

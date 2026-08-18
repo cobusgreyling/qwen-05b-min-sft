@@ -1,12 +1,13 @@
 {
-  "source": "base",
+  "source": "adapter",
   "base_model": "Qwen/Qwen2.5-0.5B-Instruct",
-  "adapter": null,
+  "adapter": "outputs/lora-sft-2",
+  "mode": "thin",
   "n": 6,
   "summary": {
     "non_empty": 1.0,
     "no_role_leak": 1.0,
-    "has_ticket_tags": 0.0,
+    "has_ticket_tags": 0.6666666666666666,
     "parsed_ok": 0.0,
     "id_match": 0.0,
     "verdict_match": 0.0,
@@ -26,10 +27,17 @@
         "amount_cents": 4500,
         "reason_code": "DUPLICATE"
       },
-      "generation": "I'm sorry to hear that you're experiencing billing issues. Could you please provide me with more details about the invoices and any additional charges you've received? This information will help me assist you better.",
+      "facts": {
+        "amounts_cents": [
+          4500,
+          2001
+        ]
+      },
+      "mode": "thin",
+      "generation": "<<TICKET>>\nid: T-2001\nsummary: Invoice error - double billing\namount_paid: 45\nreason_code: DUPLICATE_INVOICE\nnote: Invoice INV-2001 has been duplicated.\n<</TICKET>>",
       "non_empty": true,
       "no_role_leak": true,
-      "has_ticket_tags": false,
+      "has_ticket_tags": true,
       "parsed_ok": false,
       "id_match": false,
       "verdict_match": false,
@@ -37,17 +45,11 @@
       "reason_match": false,
       "verdict_allowed": false,
       "reason_allowed": false,
+      "note_facts_pass": false,
       "predicted": null,
       "format_pass": false,
       "task_pass": false,
-      "preview": "I'm sorry to hear that you're experiencing billing issues. Could you please provide me with more details about the invoices and any additional charges you've received? This informa",
-      "note_facts_pass": false,
-      "facts": {
-        "amounts_cents": [
-          4500,
-          2001
-        ]
-      }
+      "preview": "<<TICKET>> | id: T-2001 | summary: Invoice error - double billing | amount_paid: 45 | reason_code: DUPLICATE_INVOICE | note: Invoice INV-2001 has been duplicated. | <</TICKET>>"
     },
     {
       "trace_id": "T-2002",
@@ -58,10 +60,14 @@
         "amount_cents": 0,
         "reason_code": "FRAUD"
       },
-      "generation": "I'm sorry to hear that you're having trouble using your card. Could you please provide me with more details so I can assist you better?",
+      "facts": {
+        "amounts_cents": []
+      },
+      "mode": "thin",
+      "generation": "<<TICKET>>\nid: T-2002\nsummary: Card usage outside of the US\namount_spend: 0\nnote: Not applicable\n<</TICKET>>",
       "non_empty": true,
       "no_role_leak": true,
-      "has_ticket_tags": false,
+      "has_ticket_tags": true,
       "parsed_ok": false,
       "id_match": false,
       "verdict_match": false,
@@ -69,14 +75,11 @@
       "reason_match": false,
       "verdict_allowed": false,
       "reason_allowed": false,
+      "note_facts_pass": false,
       "predicted": null,
       "format_pass": false,
       "task_pass": false,
-      "preview": "I'm sorry to hear that you're having trouble using your card. Could you please provide me with more details so I can assist you better?",
-      "note_facts_pass": false,
-      "facts": {
-        "amounts_cents": []
-      }
+      "preview": "<<TICKET>> | id: T-2002 | summary: Card usage outside of the US | amount_spend: 0 | note: Not applicable | <</TICKET>>"
     },
     {
       "trace_id": "T-2003",
@@ -87,10 +90,17 @@
         "amount_cents": 0,
         "reason_code": "POLICY"
       },
-      "generation": "I'm sorry to hear that you're experiencing this issue. Could you please provide me with more details so I can assist you better?",
+      "facts": {
+        "amounts_cents": [
+          21000,
+          3300
+        ]
+      },
+      "mode": "thin",
+      "generation": "<<TICKET>>\nid: T-2003\namount_cents: 21000\nreason_code: REFUND\nnote: Customer yelling for immediate refund.\n<</TICKET>>",
       "non_empty": true,
       "no_role_leak": true,
-      "has_ticket_tags": false,
+      "has_ticket_tags": true,
       "parsed_ok": false,
       "id_match": false,
       "verdict_match": false,
@@ -98,17 +108,11 @@
       "reason_match": false,
       "verdict_allowed": false,
       "reason_allowed": false,
+      "note_facts_pass": false,
       "predicted": null,
       "format_pass": false,
       "task_pass": false,
-      "preview": "I'm sorry to hear that you're experiencing this issue. Could you please provide me with more details so I can assist you better?",
-      "note_facts_pass": false,
-      "facts": {
-        "amounts_cents": [
-          21000,
-          3300
-        ]
-      }
+      "preview": "<<TICKET>> | id: T-2003 | amount_cents: 21000 | reason_code: REFUND | note: Customer yelling for immediate refund. | <</TICKET>>"
     },
     {
       "trace_id": "T-2004",
@@ -119,10 +123,16 @@
         "amount_cents": 0,
         "reason_code": "OTHER"
       },
-      "generation": "I'm sorry to hear that you're not satisfied with the new icon on your plan. I understand that it's important for us to provide you with the best service possible. Could you please let me know if there are any specific issues or concerns related to this issue? This will help me better assist you in resolving the problem.",
+      "facts": {
+        "amounts_cents": [
+          6700
+        ]
+      },
+      "mode": "thin",
+      "generation": "<<TICKET>>\nid: T-2004\nsummary: New icon is ugly; cancel plan and refund 6700 cents\namount_cents: 6700\nstatus: CANCELLED\nreason_code: PLAN\nconfirmed_at: -\ncanceled_at: -\nconfirmation_status: CONFIRMED\nnote: No issues found.\n<</TICKET>>",
       "non_empty": true,
       "no_role_leak": true,
-      "has_ticket_tags": false,
+      "has_ticket_tags": true,
       "parsed_ok": false,
       "id_match": false,
       "verdict_match": false,
@@ -130,16 +140,11 @@
       "reason_match": false,
       "verdict_allowed": false,
       "reason_allowed": false,
+      "note_facts_pass": false,
       "predicted": null,
       "format_pass": false,
       "task_pass": false,
-      "preview": "I'm sorry to hear that you're not satisfied with the new icon on your plan. I understand that it's important for us to provide you with the best service possible. Could you please ",
-      "note_facts_pass": false,
-      "facts": {
-        "amounts_cents": [
-          6700
-        ]
-      }
+      "preview": "<<TICKET>> | id: T-2004 | summary: New icon is ugly; cancel plan and refund 6700 cents | amount_cents: 6700 | status: CANCELLED | reason_code: PLAN | confirmed_at: - | canceled_at:"
     },
     {
       "trace_id": "T-2005",
@@ -150,7 +155,11 @@
         "amount_cents": 0,
         "reason_code": "OTHER"
       },
-      "generation": "I'm here to assist you. Could you please provide more details about the issue? What steps have you already taken to resolve it?",
+      "facts": {
+        "amounts_cents": []
+      },
+      "mode": "thin",
+      "generation": "<no-input>",
       "non_empty": true,
       "no_role_leak": true,
       "has_ticket_tags": false,
@@ -161,14 +170,11 @@
       "reason_match": false,
       "verdict_allowed": false,
       "reason_allowed": false,
+      "note_facts_pass": false,
       "predicted": null,
       "format_pass": false,
       "task_pass": false,
-      "preview": "I'm here to assist you. Could you please provide more details about the issue? What steps have you already taken to resolve it?",
-      "note_facts_pass": false,
-      "facts": {
-        "amounts_cents": []
-      }
+      "preview": "<no-input>"
     },
     {
       "trace_id": "T-2006",
@@ -179,7 +185,13 @@
         "amount_cents": 12000,
         "reason_code": "DUPLICATE"
       },
-      "generation": "T-2007. I apologize for the error in my previous response. Here is the correct way to reverse the seat:\n\nT-2008. Please provide me with the original ticket number or any other relevant information so I can assist you further.",
+      "facts": {
+        "amounts_cents": [
+          12000
+        ]
+      },
+      "mode": "thin",
+      "generation": "TICKET\nSEAT_LICENSE: 12000 CENTS\nNEW_SEAT_LICENSE: 12000 CENTS",
       "non_empty": true,
       "no_role_leak": true,
       "has_ticket_tags": false,
@@ -190,16 +202,11 @@
       "reason_match": false,
       "verdict_allowed": false,
       "reason_allowed": false,
+      "note_facts_pass": false,
       "predicted": null,
       "format_pass": false,
       "task_pass": false,
-      "preview": "T-2007. I apologize for the error in my previous response. Here is the correct way to reverse the seat: |  | T-2008. Please provide me with the original ticket number or any other ",
-      "note_facts_pass": false,
-      "facts": {
-        "amounts_cents": [
-          12000
-        ]
-      }
+      "preview": "TICKET | SEAT_LICENSE: 12000 CENTS | NEW_SEAT_LICENSE: 12000 CENTS"
     }
   ]
 }
