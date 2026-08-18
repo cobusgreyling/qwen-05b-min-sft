@@ -2,7 +2,7 @@
   <img src="assets/header.png" alt="Qwen2.5-0.5B-Instruct Open Weights" width="100%" />
 </p>
 
-# Least-data SFT — Qwen2.5-0.5B-Instruct
+# Least-data SFT of Qwen2.5-0.5B-Instruct
 
 <p align="center">
   <strong>Qwen2.5-0.5B-Instruct</strong> · open weights · Apache 2.0 · LoRA SFT · Colab T4<br/>
